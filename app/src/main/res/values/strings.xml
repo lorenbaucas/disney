@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">disney</string>
+    //Pongo aquí estos strings para poder traducirlos automáticamente en caso de que el dispositivo del usuario esté en inglés
+    <string name="welcome">Bienvenido/a</string>
+    <string name="in">Iniciar sesión</string>
+    <string name="up">Registrarse</string>
+    <string name="user">Usuario</string>
+    <string name="pass">Contraseña</string>
+</resources>

@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
-import com.example.disney.RecyclerAdapter;
+
+import com.example.disney.adapter.RecyclerAdapter;
 import com.example.disney.api.Methods;
 import com.example.disney.models.Charact;
 import com.example.disney.models.Model;
@@ -23,9 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
     //Declaro la lista y los elementos del recycler view
     private RecyclerView recyclerView;
+    private RecyclerAdapter recAdapter;
+
+    private ArrayList<Charact> charactListFull = new ArrayList<>();
     private ArrayList<Charact> charactList = new ArrayList<>();
-    private LinearLayoutManager layoutManager;
-    private RecyclerAdapter recyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,31 +49,33 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
                 //Esto lo uso para ver si realmente consigue los datos de la api
-                Log.e("MainActivity", "onResponse: code: "+response.code());
+                //Log.e("MainActivity", "onResponse: code: "+response.code());
 
                 ArrayList<Model.data> data = response.body().getData();
+
                 //Por el log veo los nombres de los personajes como ejemplo para comprobar que hace bien la llamada
-                for(Model.data data1 : data){
-                    Log.e("MainActivity", "onResponse: characters : " +data1.getName());
+                for (Model.data data1 : data) {
+                    //Log.e("MainActivity", "onResponse: characters : " + data1.getName() + "  " + data1.getImageUrl());
                     //Añado a la lista solo los datos que necesito poner en el recylclerview
-                    charactList.add(new Charact(data1.getName(), data1.getImageUrl(), data1.getSourceUrl()));
+                    charactListFull.add(new Charact(data1.getName(), data1.get_id(), data1.getImageUrl()));
+                }
+                //Añado solo 10 personajes porque son demasiados y da error al cargarlos todos
+                for (int i = 0; i < 11; i++) {
+                    charactList.add(new Charact(charactListFull.get(i).getName(), charactListFull.get(i).getId(), charactListFull.get(i).getImageUrl()));
+                    //Hago este sout para comprobar que se han añadido correctamente
+                    //System.out.println(charactList.get(i).getName());
                 }
             }
 
             @Override
             public void onFailure(Call<Model> call, Throwable t) {
                 //Si la llamada a la api no se realiza correctamente podré ver el fallo
-                Log.e("MainActivity", "onFailure: "+ t.getMessage());
+                //Log.e("MainActivity", "onFailure: "+ t.getMessage());
             }
         });
 
-        //Le meto la lista al recyclerview pero haga lo que haga me dice que es demasiado grande, no se que hacer
         recyclerView = (RecyclerView) findViewById(R.id.recView);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerAdapter = new RecyclerAdapter(charactList, MainActivity.this);
-        recyclerView.setAdapter(recyclerAdapter);
-        //Continuaría el proyecto pero si ni siquiera me va el recyclerview no puedo modificar el item seleccionado o borrarlo
+        recyclerView.setAdapter(new RecyclerAdapter(charactList, MainActivity.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
 }

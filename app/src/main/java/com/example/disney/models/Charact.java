@@ -4,12 +4,12 @@ public class Charact {
 
     //Esta clase la uso para poner solo los datos que quiero poner de cada personaje
     private String name;
-    private String sourceUrl;
+    private int id;
     private String imageUrl;
 
-    public Charact(String name, String sourceUrl, String imageUrl) {
+    public Charact(String name, int id, String imageUrl) {
         this.name = name;
-        this.sourceUrl = sourceUrl;
+        this.id = id;
         this.imageUrl = imageUrl;
     }
 
@@ -21,12 +21,12 @@ public class Charact {
         this.name = name;
     }
 
-    public String getSourceUrl() {
-        return sourceUrl;
+    public int getId() {
+        return id;
     }
 
-    public void setSourceUrl(String sourceUrl) {
-        this.sourceUrl = sourceUrl;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getImageUrl() {
